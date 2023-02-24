@@ -76,3 +76,31 @@ class ClientsView(View):
         ombor1 = Ombor.objects.get(user=request.user)
         data = {'clientlar': Client.objects.filter(ombor=ombor1)}
         return render(request, 'clients.html', data)
+
+class Client_DeleteView(View):
+    def get(self, request, son):
+        cli = Client.objects.get(id=son)
+        if Ombor.objects.get(user=request.user) == cli.ombor:
+            cli.delete()
+        return redirect('/asosiy/clientlar/')
+
+class Client_EditView(View):
+    def get(self, request, son):
+        client = Client.objects.get(id=son)
+        if client.ombor == Ombor.objects.get(user=request.user):
+            data = {
+                "client": client}
+            return render(request, 'client_update.html', data)
+        return redirect('/asosiy/clientlar/')
+
+    def post(self, request, son):
+        cl = Client.objects.filter(id=son)
+        if Ombor.objects.get(user=request.user) == cl.ombor:
+            cl.update(
+                ism=request.POST.get('client_name'),
+                nom=request.POST.get('client_shop'),
+                tel=request.POST.get('client_phone'),
+                manzil=request.POST.get('client_address'),
+                qarz=request.POST.get('client_qarz'),)
+        data = {"client": Client.objects.get(id=son)}
+        return render(request, "client_update.html", data)

@@ -146,9 +146,11 @@
                             <td>{{i.nom}}</td>
                             <td>{{i.tel}}</td>
                             <td>{{i.manzil}}</td>
-                            {% endfor %}
-                            <td><a href="#"><button type="submit" class="btn btn-danger" data-toggle="modal">Tahrirlash</button></a></td>
-                        </tr>
+                            
+                            <td><a href="/asosiy/client_edit/{{i.id}}/"><button type="submit" class="btn btn-danger" data-toggle="modal">Edit</button></a>
+                            <a href="/asosiy/client_delete/{{i.id}}/"><button type="submit" class="btn btn-danger" data-toggle="modal">Delete</button></a></td>
+                            
+                          </tr>{% endfor %}
                     </tbody>
                 </table>
             </div>
