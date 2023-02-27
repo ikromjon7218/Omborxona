@@ -13,5 +13,5 @@ urlpatterns = [
     path('client_delete/<int:son>/', Client_DeleteView.as_view()),
     path('client_edit/<int:son>/', Client_EditView.as_view()),
 
-    path('statsView/', StatsView.as_view()),
+
 ]

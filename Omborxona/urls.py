@@ -8,4 +8,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view()),
     path('bolim/', BolimView.as_view()),
     path('asosiy/', include('asosiy.urls')),
+    path('stats/', include('statistika.urls')),
 ]

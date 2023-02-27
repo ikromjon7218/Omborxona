@@ -56,7 +56,7 @@
           <!-- Modal Header -->
 
           <!-- Modal body -->
-          <form id="edit-product-form">{% csrf_token %}
+          <form method="post" id="edit-product-form">{% csrf_token %}
               <label for="edit-product-name">Mahsulot nomi:</label>
               <input type="text" name="name" value="{{product.nom}}" placeholder="Mahsulot nomi..." id="edit-product-name" class="form-control" disabled>
                 <br>

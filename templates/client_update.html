@@ -57,7 +57,7 @@
           <!-- Modal Header -->
 
           <!-- Modal body -->
-          <form id="edit-product-form">{% csrf_token %}
+          <form method="post" id="edit-product-form">{% csrf_token %}
               <label for="edit-product-name">FIO:</label>
               <input type="text" name="client_name" value="{{client.ism}}" placeholder="Mijoz to'liq ismi..." id="edit-product-name" class="form-control" required>
                 <br>
@@ -74,7 +74,7 @@
               <input type="text" name="client_qarz" value="{{client.qarz}}" placeholder="Mijozning qarzi..." id="edit-product-amount" class="form-control" required>
               <br>
           <!-- Modal footer -->
-            <button type="submit" class="btn btn-success">Yangilash</button>
+          <a href="/asosiy/clientlar/"><button type="submit" class="btn btn-success">Yangilash</button></a>
               <a href="/asosiy/clientlar/"><button type="button" class="btn btn-danger" data-dismiss="modal">Yopish</button></a>
 
       </form>

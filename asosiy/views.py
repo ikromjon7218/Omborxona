@@ -1,10 +1,11 @@
-from django.http import HttpResponse
+# from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import *
 from django.views import View
 
+from django.db.models import Q
 class LoginView(View):
     def post(self, request):
         foydalanuvchi = authenticate(username=request.POST.get('l'), password=request.POST.get('p'))
@@ -26,8 +27,14 @@ class BolimView(View):
 
 class MahsulotlarView(View):
     def get(self, request):
+
         ombor1 = Ombor.objects.get(user=request.user)
-        data = {"mahsulotlar": Mahsulot.objects.filter(ombor=ombor1)}
+        soz = request.GET.get('soz')
+        if soz is None or soz == "":
+            st = Mahsulot.objects.filter(ombor=ombor1)
+        else:
+            st = Mahsulot.objects.filter(Q(ombor=ombor1), Q(nom__contains=soz) | Q(brend__contains=soz) | Q(kelgan_sana__contains=soz))
+        data = {"mahsulotlar": st}
         return render(request, 'products.html', data)
 
     def post(self, request):
@@ -74,33 +81,34 @@ class StatsView(View):
 class ClientsView(View):
     def get(self, request):
         ombor1 = Ombor.objects.get(user=request.user)
-        data = {'clientlar': Client.objects.filter(ombor=ombor1)}
+        soz = request.GET.get('soz')
+        if soz is None or soz == "":
+            st = Client.objects.filter(ombor=ombor1)
+        else:
+            st = Client.objects.filter(Q(ombor=ombor1), Q(ism__contains=soz) | Q(nom__contains=soz) | Q(manzil__contains=soz) | Q(tel__contains=soz))
+        data = {'clientlar': st}
         return render(request, 'clients.html', data)
+
 
 class Client_DeleteView(View):
     def get(self, request, son):
-        cli = Client.objects.get(id=son)
-        if Ombor.objects.get(user=request.user) == cli.ombor:
-            cli.delete()
+        ombor1 = Ombor.objects.get(user=request.user)
+        Client.objects.filter(id=son, ombor=ombor1).delete()
         return redirect('/asosiy/clientlar/')
 
 class Client_EditView(View):
     def get(self, request, son):
-        client = Client.objects.get(id=son)
-        if client.ombor == Ombor.objects.get(user=request.user):
-            data = {
-                "client": client}
-            return render(request, 'client_update.html', data)
-        return redirect('/asosiy/clientlar/')
+        ombor1 = Ombor.objects.get(user=request.user)
+        data = {"client": Client.objects.filter(id=son, ombor=ombor1)}
+        return render(request, 'client_update.html', data)
+        # return redirect('/asosiy/clientlar/')
 
     def post(self, request, son):
-        cl = Client.objects.filter(id=son)
-        if Ombor.objects.get(user=request.user) == cl.ombor:
-            cl.update(
+        ombor1 = Ombor.objects.get(user=request.user)
+        Client.objects.filter(id=son, ombor=ombor1).update(
                 ism=request.POST.get('client_name'),
                 nom=request.POST.get('client_shop'),
                 tel=request.POST.get('client_phone'),
                 manzil=request.POST.get('client_address'),
                 qarz=request.POST.get('client_qarz'),)
-        data = {"client": Client.objects.get(id=son)}
-        return render(request, "client_update.html", data)
+        return redirect('/asosiy/clientlar/')
