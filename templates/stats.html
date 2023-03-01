@@ -69,7 +69,7 @@
           <img src="{% static './dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Felix</a>
+          <a href="/bolim/" class="d-block">Felix</a>
         </div>
       </div>
 
@@ -78,19 +78,19 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-header">Menu</li>
           <li class="nav-item">
-            <a href="#" class="nav-link active">
+            <a href="/stats/" class="nav-link active">
               <i class="nav-icon far fa-circle text-warning"></i>
               <p>Statistics</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="/asosiy/mahsulotlar/" class="nav-link">
+            <a href="/asosiy/clientlar/" class="nav-link">
               <i class="nav-icon far fa-circle text-danger"></i>
               <p class="text">Clients</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="/asosiy/clientlar/" class="nav-link">
+            <a href="/asosiy/mahsulotlar/" class="nav-link">
               <i class="nav-icon far fa-circle text-info"></i>
               <p>Products</p>
             </a>
@@ -147,7 +147,7 @@
                       {% for i in statistics %}
 
                         <tr>
-                            <th scope="row">1</th>
+                            <th scope="row">{{i.id}}</th>
                             <td>{{i.mahsulot}}, {{i.ombor}}</td>
                             <td>{{i.client}}</td>
                             <td>{{i.sana}}</td>
@@ -155,7 +155,8 @@
                             <td>{{i.narx}}</td>
                             <td>{{i.tolandi}}</td>
                             <td>{{i.qarz}}</td>
-                            <td><a href="#"><button type="submit" class="btn btn-danger" data-toggle="modal">Tahrirlash</button></a></td>
+                            <td><a href="/stats/edit/{{i.id}}/"><button type="submit" class="btn btn-danger" data-toggle="modal">Edit</button></a>
+                            <a href="/stats/delete/{{i.id}}/"><button type="submit" class="btn btn-danger" data-toggle="modal">Delete</button></a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

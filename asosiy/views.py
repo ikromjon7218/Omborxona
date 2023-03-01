@@ -27,16 +27,16 @@ class BolimView(View):
 
 class MahsulotlarView(View):
     def get(self, request):
-
-        ombor1 = Ombor.objects.get(user=request.user)
-        soz = request.GET.get('soz')
-        if soz is None or soz == "":
-            st = Mahsulot.objects.filter(ombor=ombor1)
-        else:
-            st = Mahsulot.objects.filter(Q(ombor=ombor1), Q(nom__contains=soz) | Q(brend__contains=soz) | Q(kelgan_sana__contains=soz))
-        data = {"mahsulotlar": st}
-        return render(request, 'products.html', data)
-
+        if request.user.is_authenticated:
+            ombor1 = Ombor.objects.get(user=request.user)
+            soz = request.GET.get('soz')
+            if soz is None or soz == "":
+                st = Mahsulot.objects.filter(ombor=ombor1)
+            else:
+                st = Mahsulot.objects.filter(Q(ombor=ombor1), Q(nom__contains=soz) | Q(brend__contains=soz) | Q(kelgan_sana__contains=soz))
+            data = {"mahsulotlar": st}
+            return render(request, 'products.html', data)
+        return redirect('/')
     def post(self, request):
         Mahsulot.objects.create(
             nom=request.POST.get('pr_name'),

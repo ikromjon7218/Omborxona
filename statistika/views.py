@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import *
+from asosiy.models import *
 
 class StatistikaView(View):
     def get(self, request):
@@ -24,4 +25,25 @@ class StatistikaView(View):
         m.save()
         cl = Client.objects.get(id=request.POST.get('client'))
         
+        return redirect('/stats/')
+
+class StatEditView(View):
+    def post(self, request, son):
+        Statistika.objects.filter(id=son).update(mahsulot=Mahsulot.objects.get(request.POST.get('m')),
+                client=Client.objects.get(request.POST.get('c')),
+                miqdor=request.POST.get('miqdor'),
+                sana=request.POST.get('sana'),
+                narx=request.POST.get('narx'),
+                tolandi=request.POST.get('tolandi'),
+                qarz=request.POST.get('qarz'),
+                ombor=Ombor.objects.get(request.POST.get('o')))
+        return redirect('/stats/')
+    def get(self, request, son):
+        data = {"stat": Statistika.objects.get(id=son)}
+        return render(request, "stat_edit.html", data)
+
+class StatDeleteView(View):
+    def get(self, request, son):
+        if Statistika.objects.get(id=son).ombor.user == request.user:
+            Statistika.objects.get(id=son).delete()
         return redirect('/stats/')
